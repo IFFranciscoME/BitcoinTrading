@@ -12,11 +12,9 @@ cat("\014")           # Clear Console
 # -- Load required packages and suppress messages at console ------------------------------------ #
 # -- ---------------------------------------------------------------------------------------- --- #
 
-Pkg <- c("base","digest","downloader","fBasics","foreach","forecast","grid",
-         "gridExtra","ggplot2","httr","jsonlite","lubridate","moments",
-         "orderbook","PerformanceAnalytics","plyr","quantmod",
-         "Quandl","reshape2","RCurl","stats","scales","tseries","TTR","TSA",
-         "xts","zoo")
+Pkg <- c("base","digest","downloader","fBasics","foreach","forecast","grid","gridExtra","ggplot2",
+"httr","jsonlite","knitr","lubridate","moments","orderbook","PerformanceAnalytics","plyr",
+"quantmod","Quandl","reshape2","RCurl","stats","scales","tseries","TTR","TSA","xts","zoo")
 
 inst <- Pkg %in% installed.packages()
 if(length(Pkg[!inst]) > 0) install.packages(Pkg[!inst])
