@@ -122,7 +122,7 @@ colnames(DFRSI) <- c("TimeStamp","RSI")
 # -- Exploratory Plot for RSI Index Values -------------------------------------------------- --- #
 # -- ---------------------------------------------------------------------------------------- --- #
 
-PlotM1  <- FSerieM1(DFRSI,"dark red","dark gray",2,"RSI Values","2 months","red","blue")
+PlotM1  <- FSerieM1(DFRSI,"dark red","black",2,"RSI Values","2 months","red","blue")
 
 # ----------------------------------------------------------------------------------------------- #
 # -- 4 -- Parameters for Trading Simulation and Back testing ------------------------------------ #
@@ -186,7 +186,7 @@ colnames(TradeChar) <- c("Strategy Parameter","Value","Model Parameters","Value"
 
 gg_ser  <- FSerieM1(TradeStrat,"dark blue","black",2,"BtcMxn Prices","2 months","red","steel blue")
 gg_ser1 <- FTradingSignal(TradeStrat,"dark blue","black",4,"RSI","2 months","red","steel blue")
-gg_ser2 <- FEquity(TradeStrat,"dark blue","black",8,"Balance","2 months","red","steel blue")
+gg_ser2 <- FEquity(TradeStrat,"dark blue","black",8,"Balance","2 months","red","blue")
 
 # ----------------------------------------------------------------------------------------------- #
 # -- 6 -- Account balance measures -------------------------------------------------------------- #
