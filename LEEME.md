@@ -39,7 +39,7 @@ repositorios son utilizados:
 
 - IF.Francisco.ME Data Visualization Bundle: [APIConnector](https://raw.githubusercontent.com/IFFranciscoME/APIConnector/master/APIConnector.R)
 
-### Collect data
+### Obtener datos
 Para obtener los datos y guardarlos en la memoria es tan simple como realizarlo con una función de una línea.
 
 ```r
