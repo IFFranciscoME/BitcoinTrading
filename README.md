@@ -39,7 +39,7 @@ To collect data is as simple as one line per request, with the respect parameter
 
 ```r
 BtcPair  <- OHLC(Instrmt,since,interval)
-IPC <- OYStockD1("^IPC","yahoo",Sys.Date()-1000,Sys.Date())                    # BenchMark BtcMxn
+IPC <- OYStockD1("^IPC","yahoo",Sys.Date()-1000,Sys.Date())
 ```
 
 ### Now we define the following
