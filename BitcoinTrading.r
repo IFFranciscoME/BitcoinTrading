@@ -79,7 +79,7 @@ IPCRet <- IPCRet[-1,]
 # -- Exploratory Plot for BtcMxn Prices ----------------------------------------------------- --- #
 # -- ---------------------------------------------------------------------------------------- --- #
 
-PlotM1  <- FSerieM1(DFClose,"steel blue","dark gray",2,"BtcMxn Prices","1 months","red","blue")
+PlotM1  <- FSerieM1(DFClose,"steel blue","dark gray",2,"BtcMxn Prices","2 months","red","blue")
 
 # -- ---------------------------------------------------------------------------------------- --- #
 # -- Partial Auto Correlation Function as trading Parameter --------------------------------- --- #
@@ -122,7 +122,7 @@ colnames(DFRSI) <- c("TimeStamp","RSI")
 # -- Exploratory Plot for RSI Index Values -------------------------------------------------- --- #
 # -- ---------------------------------------------------------------------------------------- --- #
 
-PlotM1  <- FSerieM1(DFRSI,"dark red","dark gray",2,"RSI Values","1 months","red","blue")
+PlotM1  <- FSerieM1(DFRSI,"dark red","dark gray",2,"RSI Values","2 months","red","blue")
 
 # ----------------------------------------------------------------------------------------------- #
 # -- 4 -- Parameters for Trading Simulation and Back testing ------------------------------------ #
@@ -184,15 +184,15 @@ colnames(TradeChar) <- c("Strategy Parameter","Value","Model Parameters","Value"
 # -- 5 -- Preeliminary Results ------------------------------------------------------------------ #
 # ----------------------------------------------------------------------------------------------- #
 
-gg_ser  <- FSerieM1(TradeStrat,"royal blue","black",2,"BtcMxn Prices","1 months","red","blue")
-gg_ser1 <- FTradingSignal(TradeStrat,"royal blue","black",4,"RSI","1 months","red","blue")
-gg_ser2 <- FEquity(TradeStrat,"royal blue","black",8,"Balance","1 months","red","blue")
+gg_ser  <- FSerieM1(TradeStrat,"dark blue","black",2,"BtcMxn Prices","2 months","red","steel blue")
+gg_ser1 <- FTradingSignal(TradeStrat,"dark blue","black",4,"RSI","2 months","red","steel blue")
+gg_ser2 <- FEquity(TradeStrat,"dark blue","black",8,"Balance","2 months","red","steel blue")
 
 # ----------------------------------------------------------------------------------------------- #
-# -- 6 -- Performance, Risk and Benchmark Measures ---------------------------------------------- #
+# -- 6 -- Account balance measures -------------------------------------------------------------- #
 # ----------------------------------------------------------------------------------------------- #
 
-PerformanceSummary <- data.frame(matrix(nrow = 11, ncol = 4))
+PerformanceSummary <- data.frame(matrix(nrow = 8, ncol = 4))
 PerformanceSummary[1:5,1] <- c("Max Profit","Max Loss","Sample Length","Short positions",
 "Long positions")
 
@@ -206,16 +206,11 @@ PerformanceSummary[3,2] <- paste(length(TradeStrat$Signal),interval,sep=" ")
 PerformanceSummary[4,2] <- length(count(which(TradeStrat$Signal == -1))[,1])
 PerformanceSummary[5,2] <- length(count(which(TradeStrat$Signal == +1))[,1])
 
-PerformanceSummary[6:11,1] <- c("Profit Made","Min Balance", "Max Balance","Coins traded",
-"Week Traded Coins","Volume Added")
+PerformanceSummary[6:8,1] <- c("Profit Made","Min Balance", "Max Balance")
 PerformanceSummary[6,2]  <- paste("$ ",round(TradeStrat$Balance[length(TradeStrat$Balance)] - 
 InitialBalance,2),sep="")
 PerformanceSummary[7,2]  <- paste("$ ",round(min(TradeStrat$Balance),2),sep="")
 PerformanceSummary[8,2]  <- paste("$ ",round(max(TradeStrat$Balance),2),sep="")
-PerformanceSummary[9,2]  <- length(count(which(TradeStrat$Signal != 0))[,1])*2
-PerformanceSummary[10,2] <- round(length(count(which(TradeStrat$Signal != 0))[,1])/53,4)*2
-PerformanceSummary[11,2] <- round(length(count(which(TradeStrat$Signal != 0))[,1])/
-length(TradeStrat$Balance),2)*2
 
 TradeStratP <- TradeStrat
 TradeStratP$TimeStamp <-as.POSIXct(TradeStratP$TimeStamp)
@@ -223,24 +218,22 @@ BalanceRet <- Return.calculate(xts(TradeStratP$Balance, order.by = TradeStratP$T
 BalanceRet <- BalanceRet[-1,]
 BalanceRet <- BalanceRet[-which(BalanceRet == 0),]
 
-DSR <- round(DownsideDeviation(BalanceRet, MAR = 0),4)
-ADD <- round(AverageDrawdown(BalanceRet),4) # average depth of the observed drawdowns
-ALH <- round(AverageLength(BalanceRet),4)   # average length of the drawdowns observed.
-ARY <- round(AverageRecovery(BalanceRet),4) # average recovery period of the drawdowns
+# ----------------------------------------------------------------------------------------------- #
+# -- 7 -- Risk and Performance measures --------------------------------------------------------- #
+# ----------------------------------------------------------------------------------------------- #
 
-VaR1 <- VaR(BalanceRet, p=0.95, method="historical")*10000
+DSR <- round(DownsideDeviation(BalanceRet, MAR = 0),2) # DownSide Deviation.
+ADD <- round(AverageDrawdown(BalanceRet),2) # average depth of the observed drawdowns.
+ALH <- round(AverageLength(BalanceRet),2)   # average length of the drawdowns observed.
+ARY <- round(AverageRecovery(BalanceRet),2) # average recovery period of the drawdowns.
 
-BL <- round(BernardoLedoitRatio(BalanceRet),4)
-IR <- 2.22
-KR <- round(KellyRatio(BalanceRet, Rf=0.035/255),4)
-MG <- round(Modigliani(BalanceRet, IPCRet, Rf=0),4)
-SR <- round(SortinoRatio(BalanceRet, MAR=0.035/255),4)
-TR <- 2.22
+BL <- round(BernardoLedoitRatio(BalanceRet),2)
+KR <- round(KellyRatio(BalanceRet, Rf=0.035/255),2)
+SR <- round(SortinoRatio(BalanceRet, MAR=0.035/255),2)
 
 PerformanceSummary[,3] <- c("Downside Deviation","Average Drawdown","Average Length",
-"Average Recovery","VaR(Historical)","BernardoLedoit Ratio","ActiveReturn",
-"Kelly Ratio","Modigliani Ratio","Sortino Ratio","Treynor Ratio")
-PerformanceSummary[,4] <- c(DSR,ADD,ALH,ARY,VaR1,BL,IR,KR,MG,SR,TR)
+"Average Recovery","BernardoLedoit Ratio","Kelly Ratio","Sortino Ratio","")
+PerformanceSummary[,4] <- c(DSR,ADD,ALH,ARY,BL,KR,SR,"")
 colnames(PerformanceSummary) <- c("Trading Parameters","Value", "Risk&Performance","Value")
 
 # ----------------------------------------------------------------------------------------------- #
@@ -251,13 +244,13 @@ TradePerformancegg <- qplot(1:15, 1:15, geom = "blank") +
 theme(panel.background = element_rect(fill="white"),line = element_blank(),text=element_blank()) +
 annotation_custom(grob = tableGrob(PerformanceSummary,
 gpar.corefill = gpar(fill = "white", col="dark grey"), show.hlines = TRUE,
-show.rownames = FALSE, gp = gpar(fontsize=11)))
+show.rownames = FALSE, gp = gpar(fontsize=9)))
 
 TradeChargg <- qplot(1:15, 1:15, geom = "blank") +
 theme(panel.background = element_rect(fill="white"),line = element_blank(),text = element_blank()) +
 annotation_custom(grob = tableGrob(TradeChar,
 gpar.corefill = gpar(fill = "white", col="dark grey"), show.hlines = TRUE,
-show.rownames = FALSE, gp = gpar(fontsize=11)))
+show.rownames = FALSE, gp = gpar(fontsize=9)))
 
 grid.newpage()
 pushViewport(viewport(layout = grid.layout(3,4)))
